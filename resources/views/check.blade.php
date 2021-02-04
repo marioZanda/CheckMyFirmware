@@ -3,12 +3,15 @@
   <head>
     <title>Check My Firmware</title>
     <meta charset="utf-8">
+    <meta name="csrf-token" content="content">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>Laravel PHP Ajax Country State City Dropdown List - Tutsmake.COM</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" >
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/main_check.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    
   </head>
   <body class="big-container">
     <header class="header">
@@ -42,35 +45,27 @@
     <section class="container mt-5 tableau">
       <div class="row mb-5 mt-5 ">
         <div class="col-md-3"><p>Brand : </p></div>
-        <div class="col-md-3"><select class="custom-select my-1 mr-sm-2" id="brand-dropdown inlineFormCustomSelectPref">
+        <div class="col-md-3"><select class="custom-select my-1 mr-sm-2" id="brand">
           <option value="">Select Brand</option>
-          @foreach ($brands as $brand)
-          <option value="{{ $brand->id }}">{{ $brand->name }}</option>
-          @endforeach
+          @foreach($brands as $key => $brand)
+         <option value="{{$key}}"> {{$brand}}</option>
+         @endforeach
           </select></div>
         <div class="col-md-3"></div>
       </div>
       <div class="row mb-5">
         <div class="col-md-3"><p>Model :</p></div>
-        <div class="col-md-3"><select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+        <div class="col-md-3"><select class="custom-select my-1 mr-sm-2" id="model">
           </select></div>
       </div>
       <div class="row mb-5">
         <div class="col-md-3"><p>Version :</p></div>
-        <div class="col-md-3"><select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+        <div class="col-md-3"><select class="custom-select my-1 mr-sm-2" id="version">
           </select></div>
       </div>
+      
       <div class="row mb-5">
-        <div class="col-md-3"><p>Via URL :</p></div>
-        <div class="col-md-3">
-          <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-        </div>
-        <div class="col-md-4">
-          <input class="btn btn-success" type="submit" value="Submit">
-        </div>
-      </div>
-      <div class="row mb-5">
-        <div class="col-md-3"><p>Via your computer :</p></div>
+        <div class="col-md-3"><p>Upload :</p></div>
         <div class="col-md-3">
           <input type="file" name="file">
         </div>
@@ -80,6 +75,55 @@
         </div>
       </div>
     </section>
-  </body>
-  <footer></footer>
+    <script type=text/javascript>
+  $('#brand').change(function(){
+  var brandID = $(this).val();  
+  if(brandID){
+    $.ajax({
+      type:"GET",
+      url:"{{url('get-model-list')}}?brand_id="+brandID,
+      success:function(res){        
+      if(res){
+        $("#model").empty();
+        $("#model").append('<option>Select</option>');
+        $.each(res,function(key,value){
+          $("#model").append('<option value="'+key+'">'+value+'</option>');
+        });
+      
+      }else{
+        $("#model").empty();
+      }
+      }
+    });
+  }else{
+    $("#model").empty();
+    $("#version").empty();
+  }   
+  });
+  $('#model').on('change',function(){
+  var modelID = $(this).val();  
+  if(modelID){
+    $.ajax({
+      type:"GET",
+      url:"{{url('get-version-list')}}?model_id="+modelID,
+      success:function(res){        
+      if(res){
+        $("#version").empty();
+        $.each(res,function(key,value){
+          $("#version").append('<option value="'+key+'">'+value+'</option>');
+        });
+      
+      }else{
+        $("#version").empty();
+      }
+      }
+    });
+  }else{
+    $("#version").empty();
+  }
+    
+  });
+</script>
+</body>
+
 </html>

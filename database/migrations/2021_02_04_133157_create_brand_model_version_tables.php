@@ -39,8 +39,8 @@ class CreateBrandModelVersionTables extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('brand');
-        Schema::dropIfExists('model');
-        Schema::dropIfExists('version');
+        Schema::drop('brand');
+        Schema::drop('model');
+        Schema::drop('version');
     }
 }
