@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="{{ str_replace('_','-',app()->getLocale()) }}">
   <head>
     <title>Check My Firmware</title>
     <meta charset="utf-8">
@@ -41,27 +41,28 @@
     </header>
     <section class="container mt-5 tableau">
       <div class="row mb-5 mt-5 ">
-        <div class="col-md-4"><p>Marque : </p></div>
-        <div class="col-md-4"><select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
-          <option selected>Choose...</option>
-          <option value="1">One</option>
-          <option value="2">Two</option>
-          <option value="3">Three</option>
+        <div class="col-md-3"><p>Brand : </p></div>
+        <div class="col-md-3"><select class="custom-select my-1 mr-sm-2" id="brand-dropdown inlineFormCustomSelectPref">
+          <option value="">Select Brand</option>
+          @foreach ($brands as $brand)
+          <option value="{{ $brand->id }}">{{ $brand->name }}</option>
+          @endforeach
           </select></div>
-        <div class="col-md-4"></div>
+        <div class="col-md-3"></div>
       </div>
       <div class="row mb-5">
-        <div class="col-md-4"><p>Modèle :</p></div>
-        <div class="col-md-4"><select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
-          <option selected>Choose...</option>
-          <option value="1">One</option>
-          <option value="2">Two</option>
-          <option value="3">Three</option>
+        <div class="col-md-3"><p>Model :</p></div>
+        <div class="col-md-3"><select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
           </select></div>
       </div>
       <div class="row mb-5">
-        <div class="col-md-4"><p>Via URL :</p></div>
-        <div class="col-md-4">
+        <div class="col-md-3"><p>Version :</p></div>
+        <div class="col-md-3"><select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+          </select></div>
+      </div>
+      <div class="row mb-5">
+        <div class="col-md-3"><p>Via URL :</p></div>
+        <div class="col-md-3">
           <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
         </div>
         <div class="col-md-4">
@@ -69,8 +70,8 @@
         </div>
       </div>
       <div class="row mb-5">
-        <div class="col-md-4"><p>Via your computer :</p></div>
-        <div class="col-md-4">
+        <div class="col-md-3"><p>Via your computer :</p></div>
+        <div class="col-md-3">
           <input type="file" name="file">
         </div>
 

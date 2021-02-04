@@ -26,4 +26,8 @@ Route::get('/contact', function () {
     return view('contact');
 });
 
+Route::get('brand-model-version','BrandModelVersionController@index');
+Route::get('get-model-by-brand','BrandModelVersionController@getModel');
+Route::get('get-version-by-model','BrandModelVersionController@getVersion');
+
 
