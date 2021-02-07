@@ -6,10 +6,8 @@
     <meta name="csrf-token" content="content">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Laravel PHP Ajax Country State City Dropdown List - Tutsmake.COM</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" >
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/main_check.css">
     
   </head>
@@ -42,40 +40,73 @@
         </div>
       </nav>
     </header>
-    <section class="container mt-5 tableau">
-      <div class="row mb-5 mt-5 ">
-        <div class="col-md-3"><p>Brand : </p></div>
-        <div class="col-md-3"><select class="custom-select my-1 mr-sm-2" id="brand">
-          <option value="">Select Brand</option>
-          @foreach($brands as $key => $brand)
-         <option value="{{$key}}"> {{$brand}}</option>
-         @endforeach
-          </select></div>
-        <div class="col-md-3"></div>
-      </div>
-      <div class="row mb-5">
-        <div class="col-md-3"><p>Model :</p></div>
-        <div class="col-md-3"><select class="custom-select my-1 mr-sm-2" id="model">
-          </select></div>
-      </div>
-      <div class="row mb-5">
-        <div class="col-md-3"><p>Version :</p></div>
-        <div class="col-md-3"><select class="custom-select my-1 mr-sm-2" id="version">
-          </select></div>
-      </div>
-      
-      <div class="row mb-5">
-        <div class="col-md-3"><p>Upload :</p></div>
-        <div class="col-md-3">
-          <input type="file" name="file">
+    <section class="container ml-0 mt-3 tableau">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="row mb-4">
+              <div class="col-md-6"><p>Brand : </p></div>
+              <div class="col-md-6">
+                <select class="custom-select my-1 mr-sm-2" id="brand">
+                  <option value="">Select Brand</option>
+                  @foreach($brands as $key => $brand)
+                    <option value="{{$key}}"> {{$brand}}</option>
+                  @endforeach
+                </select>
+              </div>
+          </div>
+          <div class="row mb-4">
+            <div class="col-md-6"><p>Model :</p></div>
+            <div class="col-md-6">
+              <select class="custom-select my-1 mr-sm-2" id="model">
+              </select>
+            </div>
+          </div>
+          <div class="row mb-4">
+            <div class="col-md-6"><p>Version :</p></div>
+            <div class="col-md-6">
+              <select class="custom-select my-1 mr-sm-2" id="version">
+              </select>
+            </div>
+          </div>  
+          <div class="row mb-4">
+            <div class="col-md-6"><p>Upload :</p></div>
+            <div class="col-md-6">
+              <input type="file" name="file" id="up_file">
+            </div>
+          </div>
+          <div class="row mb-4">
+            <div class="col-md-6">
+              <input class="btn btn-success" style="float: right;" type="submit" value="Submit" id="upload">
+            </div>
+            <div class="col md-6"></div>
+          </div>
         </div>
-
-        <div class="col-md-4">
-          <input class="btn btn-success" type="submit" value="Submit">
+        <div class="col-md-6 hidable">
+          <div class="row mb-4">
+            <div class="col-md-6"><p>Firmware integrity : </p></div>
+            <div class="col-md-6"><p class="text-left" id="answer"></p></div>
+          </div>
+          <div class="row mb-4">
+            <div class="col-md-6"><p>Official hash : </p></div>
+            <div class="col-md-6"><p class="text-left" id="off_hash"></p></div>
+          </div>
+          <div class="row mb-4">
+            <div class="col-md-6"><p>Your file hash : </p></div>
+            <div class="col-md-6"><p class="text-left" id="file_hash"></p></div>
+          </div>
+          <div class="row mb-4">
+            <div class="col-md-6"><p>Trustable download link : </p></div>
+            <div class="col-md-6"><p class="text-left"><a id="link"></a></p></div>
+          </div>
         </div>
       </div>
     </section>
     <script type=text/javascript>
+    $(document).ready(function(){
+    $(".hidable").hide();
+    $("#upload").prop('disabled', !0);
+    
+    });
   $('#brand').change(function(){
   var brandID = $(this).val();  
   if(brandID){
@@ -106,22 +137,54 @@
     $.ajax({
       type:"GET",
       url:"{{url('get-version-list')}}?model_id="+modelID,
-      success:function(res){        
+      success:function(res){  
+              
       if(res){
         $("#version").empty();
+        
         $.each(res,function(key,value){
           $("#version").append('<option value="'+key+'">'+value+'</option>');
         });
+        $("#version").change();
+        
       
       }else{
         $("#version").empty();
       }
       }
     });
+    
   }else{
     $("#version").empty();
   }
-    
+  });
+
+  $('#version').on('change',function(){
+    var versionID = $(this).val();
+    $.ajax({
+      type:"GET",
+      url:"{{url('get-version-hash')}}?version_id="+versionID,
+      success:function(res){ 
+        $.each(res,function(key,value){
+          $("#link").text("link");
+          document.getElementById("link").setAttribute("href",key);
+          $("#off_hash").text(value);
+          $("#answer").text("Not checked yet");
+          $("#file_hash").text("No file uploaded");
+          $(".hidable").show();
+          $("#upload").prop('disabled', !1);
+        })
+    }
+    });
+  });
+
+  $('#upload').click(function(){
+    var file_length = document.getElementById("up_file").files.length;
+    if( file_length == 0 ){
+      alert("no files selected");
+    } else {
+      var file = $('#up_file').prop('files')[0];
+    }
   });
 </script>
 </body>

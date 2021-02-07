@@ -13,17 +13,24 @@ class BrandModelVersionController extends Controller
         return view('check',compact('brands'));
     }
     public function getModelList(Request $request)
+    {
+        $models = DB::table("model")
+        ->where("brand_id",$request->brand_id)
+        ->pluck("name","id");
+        return response()->json($models);
+    }
+    public function getVersionList(Request $request)
+    {
+        $versions = DB::table("version")
+        ->where("model_id",$request->model_id)
+        ->pluck("name","id");
+        return response()->json($versions);
+    }
+    public function getVersionHash(Request $request)
         {
-            $models = DB::table("model")
-            ->where("brand_id",$request->brand_id)
-            ->pluck("name","id");
-            return response()->json($models);
-        }
-        public function getVersionList(Request $request)
-        {
-            $versions = DB::table("version")
-            ->where("model_id",$request->model_id)
-            ->pluck("name","id");
-            return response()->json($versions);
+            $datas = DB::table("version")
+            ->where("id",$request->version_id)
+            ->pluck("Hash","link");
+            return response()->json($datas);
         }
 }

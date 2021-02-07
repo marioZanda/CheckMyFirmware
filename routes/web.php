@@ -17,7 +17,7 @@ Route::get('/', function () {
     return view('index');
 });
 Route::get('/index', function () {
-    return view('check');
+    return view('index');
 });
 
 Route::get('/contact', function () {
@@ -27,3 +27,4 @@ Route::get('/contact', function () {
 Route::get('check','BrandModelVersionController@index');
 Route::get('get-model-list','BrandModelVersionController@getModelList');
 Route::get('get-version-list','BrandModelVersionController@getVersionList');
+Route::get('get-version-hash','BrandModelVersionController@getVersionHash');
