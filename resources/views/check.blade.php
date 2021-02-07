@@ -8,6 +8,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" >
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/md5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/enc-base64-min.js"></script>
     <link rel="stylesheet" href="css/main_check.css">
     
   </head>
@@ -69,7 +71,7 @@
             </div>
           </div>  
           <div class="row mb-4">
-            <div class="col-md-6"><p>Upload :</p></div>
+            <div class="col-md-6"><p>Via path :</p></div>
             <div class="col-md-6">
               <input type="file" name="file" id="up_file">
             </div>
@@ -87,15 +89,15 @@
             <div class="col-md-6"><p class="text-left" id="answer"></p></div>
           </div>
           <div class="row mb-4">
-            <div class="col-md-6"><p>Official hash : </p></div>
+            <div class="col-md-6"><p>Official MD5 hash : </p></div>
             <div class="col-md-6"><p class="text-left" id="off_hash"></p></div>
           </div>
           <div class="row mb-4">
-            <div class="col-md-6"><p>Your file hash : </p></div>
+            <div class="col-md-6"><p>Your file MD5 hash : </p></div>
             <div class="col-md-6"><p class="text-left" id="file_hash"></p></div>
           </div>
           <div class="row mb-4">
-            <div class="col-md-6"><p>Trustable download link : </p></div>
+            <div class="col-md-6"><p>Official file link : </p></div>
             <div class="col-md-6"><p class="text-left"><a id="link"></a></p></div>
           </div>
         </div>
@@ -116,7 +118,7 @@
       success:function(res){        
       if(res){
         $("#model").empty();
-        $("#model").append('<option>Select</option>');
+        $("#model").append('<option>Select Model</option>');
         $.each(res,function(key,value){
           $("#model").append('<option value="'+key+'">'+value+'</option>');
         });
@@ -141,12 +143,10 @@
               
       if(res){
         $("#version").empty();
-        
+        $("#version").append('<option>Select version</option>');
         $.each(res,function(key,value){
           $("#version").append('<option value="'+key+'">'+value+'</option>');
         });
-        $("#version").change();
-        
       
       }else{
         $("#version").empty();
@@ -183,9 +183,32 @@
     if( file_length == 0 ){
       alert("no files selected");
     } else {
-      var file = $('#up_file').prop('files')[0];
+      onFileSelect();
     }
   });
+
+  function onFileSelect(){
+        var reader = new FileReader();
+
+        reader.addEventListener('load',function () {
+          var hash = CryptoJS.MD5(CryptoJS.enc.Latin1.parse(this.result));
+          var md5 = hash.toString(CryptoJS.enc.Hex)
+          var filename = document.getElementById("up_file").value.split('/').pop().split('\\').pop();
+          var output = "" + md5
+          console.log(output);
+          document.getElementById("file_hash").innerText = output;
+          if (md5 == $('#off_hash').text()){
+            $('#answer').css("color","green");
+            $('#answer').html("Verified &#10004;");
+          } else {
+            $('#answer').css("color","red");
+            $('#answer').html("Bad one &#10006;");
+          }
+        });
+        reader.readAsBinaryString(document.getElementById("up_file").files[0]);
+
+      
+      }
 </script>
 </body>
 

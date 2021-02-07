@@ -47,4 +47,9 @@ p{
   text-align: right;
 }
 
-
+a {
+  color : green;
+}
+#answer {
+  color : grey;
+}
