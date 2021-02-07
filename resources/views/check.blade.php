@@ -6,9 +6,12 @@
     <meta name="csrf-token" content="content">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="icon" href="img/favicon.jpeg">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" >
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/md5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/core.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/enc-base64-min.js"></script>
     <link rel="stylesheet" href="css/main_check.css">
     
@@ -80,7 +83,7 @@
             <div class="col-md-6">
               <input class="btn btn-success" style="float: right;" type="submit" value="Submit" id="upload">
             </div>
-            <div class="col md-6"></div>
+            <div class="col md-6"><p class="text-left" id="progress"></div>
           </div>
         </div>
         <div class="col-md-6 hidable">
@@ -183,32 +186,83 @@
     if( file_length == 0 ){
       alert("no files selected");
     } else {
-      onFileSelect();
+      process();
     }
   });
+function process() {
+  getMD5(
+    document.getElementById("up_file").files[0],
+    prog => $("#progress").text("" + Math.floor(prog*100) + "%")
+  ).then(
+    res => answer(res),
+    err => console.error(err)
+  );
+}
 
-  function onFileSelect(){
-        var reader = new FileReader();
+function answer(md5){
+  $("#file_hash").text(md5);
+  console.log(md5);
+  if (md5 == $('#off_hash').text()){
+    $('#answer').css("color","green");
+    $('#answer').html("Verified &#10004;");
+  } else {
+    $('#answer').css("color","red");
+    $('#answer').html("Bad one &#10006;");
+  }
+}
 
-        reader.addEventListener('load',function () {
-          var hash = CryptoJS.MD5(CryptoJS.enc.Latin1.parse(this.result));
-          var md5 = hash.toString(CryptoJS.enc.Hex)
-          var filename = document.getElementById("up_file").value.split('/').pop().split('\\').pop();
-          var output = "" + md5
-          console.log(output);
-          document.getElementById("file_hash").innerText = output;
-          if (md5 == $('#off_hash').text()){
-            $('#answer').css("color","green");
-            $('#answer').html("Verified &#10004;");
-          } else {
-            $('#answer').css("color","red");
-            $('#answer').html("Bad one &#10006;");
-          }
-        });
-        reader.readAsBinaryString(document.getElementById("up_file").files[0]);
+function readChunked(file, chunkCallback, endCallback) {
+  var fileSize   = file.size;
+  var chunkSize  = 4 * 1024 * 1024; // 4MB
+  var offset     = 0;
+  
+  var reader = new FileReader();
+  reader.onload = function() {
+    if (reader.error) {
+      endCallback(reader.error || {});
+      return;
+    }
+    offset += reader.result.length;
+    chunkCallback(reader.result, offset, fileSize); 
+    if (offset >= fileSize) {
+      endCallback(null);
+      return;
+    }
+    readNext();
+  };
 
-      
+  reader.onerror = function(err) {
+    endCallback(err || {});
+  };
+
+  function readNext() {
+    var fileSlice = file.slice(offset, offset + chunkSize);
+    reader.readAsBinaryString(fileSlice);
+  }
+  readNext();
+}
+
+function getMD5(blob, cbProgress) {
+  return new Promise((resolve, reject) => {
+    var md5 = CryptoJS.algo.MD5.create();
+    readChunked(blob, (chunk, offs, total) => {
+      md5.update(CryptoJS.enc.Latin1.parse(chunk));
+      if (cbProgress) {
+        cbProgress(offs / total);
       }
+    }, err => {
+      if (err) {
+        reject(err);
+      } else {
+        // TODO: Handle errors
+        var hash = md5.finalize();
+        var hashHex = hash.toString(CryptoJS.enc.Hex);
+        resolve(hashHex);
+      }
+    });
+  });
+}
+
 </script>
 </body>
 

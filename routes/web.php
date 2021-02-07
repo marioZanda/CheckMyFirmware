@@ -20,9 +20,8 @@ Route::get('/index', function () {
     return view('index');
 });
 
-Route::get('/contact', function () {
-    return view('contact');
-});
+Route::get('/contact', 'ContactController@contact')->name('contact');
+Route::post('/contact', 'ContactController@contactPost');
 
 Route::get('check','BrandModelVersionController@index');
 Route::get('get-model-list','BrandModelVersionController@getModelList');
