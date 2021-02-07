@@ -19,7 +19,7 @@
   <body class="big-container">
     <header class="header">
       <!-- Navigation -->
-      <nav class="navbar navbar-expand-md navbar-light static-top" id="headerr">
+      <nav class="navbar navbar-expand-sm navbar-light static-top" id="headerr">
         <div class="container-fluid" id="headerr" >
           <a class="navbar-brand navvbrand" href="index">
             <img src="img/logo.svg" id="logoo" alt="">
@@ -47,10 +47,10 @@
     </header>
     <section class="container ml-0 mt-3 tableau">
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-sm-6">
           <div class="row mb-4">
-              <div class="col-md-6"><p>Brand : </p></div>
-              <div class="col-md-6">
+              <div class="col-sm-6"><p>Brand : </p></div>
+              <div class="col-sm-6">
                 <select class="custom-select my-1 mr-sm-2" id="brand">
                   <option value="">Select Brand</option>
                   @foreach($brands as $key => $brand)
@@ -60,48 +60,48 @@
               </div>
           </div>
           <div class="row mb-4">
-            <div class="col-md-6"><p>Model :</p></div>
-            <div class="col-md-6">
+            <div class="col-sm-6"><p>Model :</p></div>
+            <div class="col-sm-6">
               <select class="custom-select my-1 mr-sm-2" id="model">
               </select>
             </div>
           </div>
           <div class="row mb-4">
-            <div class="col-md-6"><p>Version :</p></div>
-            <div class="col-md-6">
+            <div class="col-sm-6"><p>Version :</p></div>
+            <div class="col-sm-6">
               <select class="custom-select my-1 mr-sm-2" id="version">
               </select>
             </div>
           </div>  
           <div class="row mb-4">
-            <div class="col-md-6"><p>Via path :</p></div>
-            <div class="col-md-6">
+            <div class="col-sm-6"><p>Via path :</p></div>
+            <div class="col-sm-6">
               <input type="file" name="file" id="up_file">
             </div>
           </div>
           <div class="row mb-4">
-            <div class="col-md-6">
+            <div class="col-sm-6">
               <input class="btn btn-success" style="float: right;" type="submit" value="Submit" id="upload">
             </div>
-            <div class="col md-6"><p class="text-left" id="progress"></div>
+            <div class="col sm-6"><p class="text-left" id="progress"></div>
           </div>
         </div>
-        <div class="col-md-6 hidable">
+        <div class="col-sm-6 hidable">
           <div class="row mb-4">
-            <div class="col-md-6"><p>Firmware integrity : </p></div>
-            <div class="col-md-6"><p class="text-left" id="answer"></p></div>
+            <div class="col-sm-6"><p>Firmware integrity : </p></div>
+            <div class="col-sm-6"><p class="text-left" id="answer"></p></div>
           </div>
           <div class="row mb-4">
-            <div class="col-md-6"><p>Official MD5 hash : </p></div>
-            <div class="col-md-6"><p class="text-left" id="off_hash"></p></div>
+            <div class="col-sm-6"><p>Official MD5 hash : </p></div>
+            <div class="col-sm-6"><p class="text-left" id="off_hash"></p></div>
           </div>
           <div class="row mb-4">
-            <div class="col-md-6"><p>Your file MD5 hash : </p></div>
-            <div class="col-md-6"><p class="text-left" id="file_hash"></p></div>
+            <div class="col-sm-6"><p>Your file sm5 hash : </p></div>
+            <div class="col-sm-6"><p class="text-left" id="file_hash"></p></div>
           </div>
           <div class="row mb-4">
-            <div class="col-md-6"><p>Official file link : </p></div>
-            <div class="col-md-6"><p class="text-left"><a id="link"></a></p></div>
+            <div class="col-sm-6"><p>Official file link : </p></div>
+            <div class="col-sm-6"><p class="text-left"><a id="link"></a></p></div>
           </div>
         </div>
       </div>

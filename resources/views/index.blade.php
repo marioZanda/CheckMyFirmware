@@ -13,7 +13,7 @@
   <body class="big-container">
     <header class="header">
       <!-- Navigation -->
-      <nav class="navbar navbar-expand-md navbar-light static-top" id="headerr">
+      <nav class="navbar navbar-expand-sm navbar-light static-top" id="headerr">
         <div class="container-fluid" id="headerr" >
           <a class="navbar-brand navvbrand" href="#">
             <img src="img/logo.svg" id="logoo" alt="">
@@ -44,13 +44,13 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-xs-6 col-lg-6 mt-5">
-          <h1 class="mt-4">Logo Nav by Start Bootstrap</h1>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugit facilis laudantium temporibus cumque quia, voluptate ratione animi quis, necessitatibus quam inventore quasi rerum voluptatem maiores obcaecati odio, totam libero provident!.</p>
+          <h1 class="mt-4">Check your firmware integrity</h1>
+          <p>this tool will allow you to check the integrity of a frimware installation file before the installation.Our database is maintained up to date by a devoted community that scours the web in search of official firmware versions . Check My Firmware is a web application client-side based that allows you to verify the legitimacy of all your files without worrying about they size. They are never uploaded to our servers.What are you waiting for ?</p>
         </div>
       </div>
       <div class="row mt-5">
-        <div class="col-md-3"><a href="check"><button type="button" class="btn btn-success btn-lg btn-block">Start</button></a></div>
-        <div class="col-md-3"><a href="contact"><button type="button" class="btn btn-outline-dark btn-lg btn-block">Contact</button></a></div>
+        <div class="col-sm-3"><a href="check"><button type="button" class="btn btn-success btn-lg btn-block">Start</button></a></div>
+        <div class="col-sm-3"><a href="contact"><button type="button" class="btn btn-outline-dark btn-lg btn-block">Contact</button></a></div>
       </div>
     </div>
     <!-- /.container -->
